@@ -6,21 +6,23 @@ using std::endl;
 int main(int argc, char **argv)
 {
 
-    const int size = 10;
-    Matrix m1(size, size, 1.0);
-    for (size_t row_index = 0; row_index < size; ++row_index)
-        for (size_t col_index = 0; col_index < size; ++col_index)
-            m1(row_index, col_index) = (68.556 * rand() / RAND_MAX - 32.768);
-    cout << "M1: \n" << m1 << endl;
-
-    Matrix m2(size, size, 1.0);
-    for (size_t row_index = 0; row_index < size; ++row_index)
-        for (size_t col_index = 0; col_index < size; ++col_index)
-            m2(row_index, col_index) = (68.556 * rand() / RAND_MAX - 32.768);
-    cout << "M2: \n" << m1 << endl;
-
-    Matrix m3 = m1 * m2;
-    cout << "M3: \n" << m3 << endl;
-    m3 += m2;
-    cout << "M3: \n" << m3 << endl;
+    Matrix<int> m1(2, 3);
+    m1(0,0) = 1;
+    m1(0,1) = 2;
+    m1(0,2) = 3;
+    m1(1,0) = 4;
+    m1(1,1) = 5;
+    m1(1,2) = 6;
+    cout << "\n" << m1 ;
+    Matrix<int> m2(3, 2);
+    m2(0,0) = 7;
+    m2(0,1) = 8;
+    m2(1,0) = 9;
+    m2(1,1) = 10;
+    m2(2,0) = 11;
+    m2(2,1) = 12;
+    cout << "\n" << m2 ;
+    Matrix<int> m3(3, 2);
+    m3 = m1*m2;
+    cout << m3;
 }
