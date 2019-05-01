@@ -12,6 +12,7 @@ private:
     size_t rows{};
     size_t columns{};
     T *matrix;
+
     friend std::ostream &operator<<(std::ostream &out, const Matrix &mat) {
         for (size_t i = 0; i < mat.rows; ++i) {
             for (size_t j = 0; j < mat.columns; ++j) {
@@ -24,33 +25,45 @@ private:
     }
 
 public:
-// Indexing - Function to index i,j positions in a linear manner
+    // Indexing - Function to index i,j positions in a linear manner
     size_t index(const size_t &i, const size_t &j) const;
-// () Operator overloading
+
+    // () Operator overloading
     T &operator()(const size_t &i, const size_t &j);
     const T &operator()(const size_t &i, const size_t &j) const;
-// Constructor
+
+    // Constructor
     explicit Matrix(size_t row_size = 0, size_t column_size = 0, T value = 0);
+
     // Destructor
     virtual ~Matrix();
+
     //Swap function - would be used within the move constructor
     void swap(Matrix that);
+
     // Copy constructor
     Matrix(const Matrix &that);
+
     // Move constructor
     Matrix(Matrix &&that);
+
     // Copy and swap assignment operator
     Matrix &operator=(Matrix that);
+
     // == Operator overloading
     bool operator==(const Matrix &rhs) const;
+
     // != Operator overloading
     bool operator!=(const Matrix &rhs) const;
+
     // + Operator overloading
     Matrix operator+(const Matrix &addend) const;
     Matrix &operator+=(const Matrix &addend);
+
     // - Operator overloading
     Matrix operator-(const Matrix &subtrahend) const;
     Matrix &operator-=(const Matrix &subtrahend);
+
     // * Operator overloading
     Matrix operator*(const Matrix &multiplicand) const;
     void operator*=(const Matrix &multiplicand);
@@ -80,6 +93,7 @@ const T &Matrix<T>::operator()(const size_t &i, const size_t &j) const
     return matrix[index(i, j)];
 }
 
+// Constructor
 template<typename T>
 Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
     :rows(row_size),
@@ -94,12 +108,14 @@ Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
     }
 }
 
+// Destructor
 template<typename T>
 Matrix<T>::~Matrix()
 {
     delete[] matrix;
 }
 
+//Swap function - would be used within the move constructor
 template<typename T>
 void Matrix<T>::swap(Matrix that)
 {
@@ -108,6 +124,7 @@ void Matrix<T>::swap(Matrix that)
     std::swap(this->matrix, that.matrix);
 }
 
+// Copy constructor
 template<typename T>
 Matrix<T>::Matrix(const Matrix &that)
 {
@@ -122,6 +139,7 @@ Matrix<T>::Matrix(const Matrix &that)
     }
 }
 
+// Move constructor
 template<typename T>
 Matrix<T>::Matrix(Matrix &&that)
     :
@@ -132,12 +150,14 @@ Matrix<T>::Matrix(Matrix &&that)
     swap(that);
 }
 
+// Copy and swap assignment operator
 template<typename T>
 Matrix<T> &Matrix<T>::operator=(Matrix that)
 {
     swap(that);
 }
 
+// == Operator overloading
 template<typename T>
 bool Matrix<T>::operator==(const Matrix &rhs) const
 {
@@ -156,12 +176,14 @@ bool Matrix<T>::operator==(const Matrix &rhs) const
     return true;
 }
 
+// != Operator overloading
 template<typename T>
 bool Matrix<T>::operator!=(const Matrix &rhs) const
 {
     return !(rhs == *this);
 }
 
+// + Operator overloading
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix &addend) const
 {
@@ -187,6 +209,7 @@ Matrix<T> &Matrix<T>::operator+=(const Matrix &addend)
     return *this;
 }
 
+// - Operator overloading
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix &subtrahend) const
 {
@@ -212,6 +235,7 @@ Matrix<T> &Matrix<T>::operator-=(const Matrix &subtrahend)
     return *this;
 }
 
+// * Operator overloading
 template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix &multiplicand) const
 {
