@@ -12,7 +12,8 @@ private:
     size_t rows{};
     size_t columns{};
     T *matrix;
-    friend std::ostream &operator<<(std::ostream &out, const Matrix &mat) {
+    friend std::ostream &operator<<(std::ostream &out, const Matrix &mat)
+    {
         for (size_t i = 0; i < mat.rows; ++i) {
             for (size_t j = 0; j < mat.columns; ++j) {
                 out << "  " << mat(i, j) << "  ";
@@ -30,30 +31,29 @@ public:
     T &operator()(const size_t &i, const size_t &j);
     const T &operator()(const size_t &i, const size_t &j) const;
 // Constructor
-    explicit Matrix(size_t row_size = 0, size_t column_size = 0, T value = 0);
+    Matrix(const size_t row_size, const size_t column_size, T value = 0);
+    Matrix();
     // Destructor
     virtual ~Matrix();
-    //Swap function - would be used within the move constructor
-    void swap(Matrix that);
     // Copy constructor
-    Matrix(const Matrix &that);
+    Matrix(const Matrix<T> &that);
     // Move constructor
-    Matrix(Matrix &&that);
+    Matrix(Matrix<T> &&that);
     // Copy and swap assignment operator
-    Matrix &operator=(Matrix that);
+    Matrix &operator=(Matrix<T> that);
     // == Operator overloading
-    bool operator==(const Matrix &rhs) const;
+    bool operator==(const Matrix<T> &rhs) const;
     // != Operator overloading
-    bool operator!=(const Matrix &rhs) const;
+    bool operator!=(const Matrix<T> &rhs) const;
     // + Operator overloading
-    Matrix operator+(const Matrix &addend) const;
-    Matrix &operator+=(const Matrix &addend);
+    Matrix operator+(const Matrix<T> &addend) const;
+    Matrix &operator+=(const Matrix<T> &addend);
     // - Operator overloading
-    Matrix operator-(const Matrix &subtrahend) const;
-    Matrix &operator-=(const Matrix &subtrahend);
+    Matrix operator-(const Matrix<T> &subtrahend) const;
+    Matrix &operator-=(const Matrix<T> &subtrahend);
     // * Operator overloading
-    Matrix operator*(const Matrix &multiplicand) const;
-    void operator*=(const Matrix &multiplicand);
+    Matrix operator*(const Matrix<T> &multiplicand) const;
+    void operator*=(const Matrix<T> &multiplicand);
 };
 
 template<typename T>
@@ -81,7 +81,7 @@ const T &Matrix<T>::operator()(const size_t &i, const size_t &j) const
 }
 
 template<typename T>
-Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
+Matrix<T>::Matrix(const size_t row_size, const size_t column_size, T value)
     :rows(row_size),
      columns(column_size),
      matrix(new T[row_size * column_size])
@@ -95,25 +95,27 @@ Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
 }
 
 template<typename T>
+Matrix<T>::Matrix()
+    :rows(0),
+     columns(0),
+     matrix(nullptr)
+{
+
+}
+
+template<typename T>
 Matrix<T>::~Matrix()
 {
     delete[] matrix;
+    std::cout << "\nDestructor called\n";
 }
 
 template<typename T>
-void Matrix<T>::swap(Matrix that)
+Matrix<T>::Matrix(const Matrix<T> &that)
+    :rows(that.rows),
+     columns(that.columns),
+     matrix(new T[rows * columns])
 {
-    std::swap(this->rows, that.rows);
-    std::swap(this->columns, that.columns);
-    std::swap(this->matrix, that.matrix);
-}
-
-template<typename T>
-Matrix<T>::Matrix(const Matrix &that)
-{
-    this->rows = that.rows;
-    this->columns = that.columns;
-    this->matrix = new T[rows * columns];
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < columns; ++j) {
             // Assigning values of each element to the copy
@@ -123,19 +125,22 @@ Matrix<T>::Matrix(const Matrix &that)
 }
 
 template<typename T>
-Matrix<T>::Matrix(Matrix &&that)
+Matrix<T>::Matrix(Matrix<T> &&that)
     :
-    rows(0),
-    columns(0),
-    matrix(nullptr)
+    rows(std::move(that.rows)),
+    columns(std::move(that.columns)),
+    matrix(that.matrix)
 {
-    swap(that);
+    that.matrix = nullptr;
 }
 
 template<typename T>
-Matrix<T> &Matrix<T>::operator=(Matrix that)
+Matrix<T> &Matrix<T>::operator=(Matrix<T> that)
 {
-    swap(that);
+    std::swap(this->rows, that.rows);
+    std::swap(this->columns, that.columns);
+    std::swap(this->matrix, that.matrix);
+    return *this;
 }
 
 template<typename T>
