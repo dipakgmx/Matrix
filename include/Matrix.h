@@ -4,15 +4,22 @@
 #include <iostream>
 #include <cassert>
 
-
+/**
+ * Matrix class
+ * @tparam T
+ */
 template<typename T>
 class Matrix
 {
+    
 private:
     size_t rows{};
     size_t columns{};
     T *matrix;
 
+    /**
+     * Ostream operator << overloading to print the matrix class using << operator
+     */
     friend std::ostream &operator<<(std::ostream &out, const Matrix &mat) {
         for (size_t i = 0; i < mat.rows; ++i) {
             for (size_t j = 0; j < mat.columns; ++j) {
@@ -69,6 +76,13 @@ public:
     void operator*=(const Matrix &multiplicand);
 };
 
+/**
+ * Indexing - Function to index (i,j) positions in a linear manner
+ * @tparam T template type
+ * @param i index at position i in the matrix
+ * @param j index at position j in the matrix
+ * @return array index for array "matrix"
+ */
 template<typename T>
 size_t Matrix<T>::index(const size_t &i, const size_t &j) const
 {
@@ -79,6 +93,13 @@ size_t Matrix<T>::index(const size_t &i, const size_t &j) const
 // () Operator overloading
 // Note: return type is set to a double & (a reference is sent) so that, once can use it as a lvalue!
 // Else, an r value would be sent, causing assignment of new values to the returned value from this operator futile
+/**
+ * () Operator overloading: For assigning value at a index (i, j) within the matrix using () operator
+ * @tparam T template type
+ * @param i index at position i in the matrix
+ * @param j index at position j in the matrix
+ * @return value at position (i,j)
+ */
 template<typename T>
 T &Matrix<T>::operator()(const size_t &i, const size_t &j)
 {
@@ -86,6 +107,13 @@ T &Matrix<T>::operator()(const size_t &i, const size_t &j)
     return matrix[index(i, j)];
 }
 
+/**
+ * () Operator overloading: For traversing through the matrix using () operator
+ * @tparam T template type
+ * @param i index at position i in the matrix
+ * @param j index at position j in the matrix
+ * @return value at position (i,j)
+ */
 template<typename T>
 const T &Matrix<T>::operator()(const size_t &i, const size_t &j) const
 {
@@ -93,7 +121,13 @@ const T &Matrix<T>::operator()(const size_t &i, const size_t &j) const
     return matrix[index(i, j)];
 }
 
-// Constructor
+/**
+ * Constructor for class matrix
+ * @tparam T template type
+ * @param row_size row size defaulted to 1
+ * @param column_size column size defaulted to 1
+ * @param value initial value of all elements in the matrix
+ */
 template<typename T>
 Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
     :rows(row_size),
@@ -108,14 +142,21 @@ Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
     }
 }
 
-// Destructor
+/**
+ * Destructor for class matrix
+ * @tparam T template type
+ */
 template<typename T>
 Matrix<T>::~Matrix()
 {
     delete[] matrix;
 }
 
-//Swap function - would be used within the move constructor
+/**
+ * Swap function - would be used within the move constructor
+ * @tparam T template type
+ * @param target matrix to be swapped
+ */
 template<typename T>
 void Matrix<T>::swap(Matrix that)
 {
@@ -124,7 +165,11 @@ void Matrix<T>::swap(Matrix that)
     std::swap(this->matrix, that.matrix);
 }
 
-// Copy constructor
+/**
+ * Copy constructor
+ * @tparam T template type
+ * @param target matrix to be copied
+ */
 template<typename T>
 Matrix<T>::Matrix(const Matrix &that)
 {
@@ -139,7 +184,11 @@ Matrix<T>::Matrix(const Matrix &that)
     }
 }
 
-// Move constructor
+/**
+ * Move constructor
+ * @tparam T template type
+ * @param target matrix to be swapped
+ */
 template<typename T>
 Matrix<T>::Matrix(Matrix &&that)
     :
@@ -150,14 +199,24 @@ Matrix<T>::Matrix(Matrix &&that)
     swap(that);
 }
 
-// Copy and swap assignment operator
+/**
+ * Copy and swap assignment operator
+ * @tparam T template type
+ * @param that target matrix to be copied
+ * @return
+ */
 template<typename T>
 Matrix<T> &Matrix<T>::operator=(Matrix that)
 {
     swap(that);
 }
 
-// == Operator overloading
+/**
+ * Equality operator == overloading
+ * @tparam T template type
+ * @param rhs matrix object to be compared
+ * @return result as true or false
+ */
 template<typename T>
 bool Matrix<T>::operator==(const Matrix &rhs) const
 {
@@ -176,14 +235,24 @@ bool Matrix<T>::operator==(const Matrix &rhs) const
     return true;
 }
 
-// != Operator overloading
+/**
+ * Inequality operator != overloading
+ * @tparam T template type
+ * @param rhs matrix object to be compared
+ * @return result as true or false
+ */
 template<typename T>
 bool Matrix<T>::operator!=(const Matrix &rhs) const
 {
     return !(rhs == *this);
 }
 
-// + Operator overloading
+/**
+ * Addition operator + overloading
+ * @tparam T template type
+ * @param addend
+ * @return result matrix
+ */
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix &addend) const
 {
@@ -197,6 +266,12 @@ Matrix<T> Matrix<T>::operator+(const Matrix &addend) const
     return result;
 }
 
+/**
+ * Addition operator += overloading
+ * @tparam T
+ * @param addend
+ * @return pointer to "this" matrix
+ */
 template<typename T>
 Matrix<T> &Matrix<T>::operator+=(const Matrix &addend)
 {
@@ -209,7 +284,12 @@ Matrix<T> &Matrix<T>::operator+=(const Matrix &addend)
     return *this;
 }
 
-// - Operator overloading
+/**
+ * Subtraction operator - overloading
+ * @tparam T template type
+ * @param addend
+ * @return result matrix
+ */
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix &subtrahend) const
 {
@@ -223,6 +303,12 @@ Matrix<T> Matrix<T>::operator-(const Matrix &subtrahend) const
     return result;
 }
 
+/**
+ * Addition operator -= overloading
+ * @tparam T
+ * @param addend
+ * @return pointer to "this" matrix
+ */
 template<typename T>
 Matrix<T> &Matrix<T>::operator-=(const Matrix &subtrahend)
 {
@@ -235,7 +321,12 @@ Matrix<T> &Matrix<T>::operator-=(const Matrix &subtrahend)
     return *this;
 }
 
-// * Operator overloading
+/**
+ * Multiplication operator * overloading
+ * @tparam T template type
+ * @param addend
+ * @return result matrix
+ */
 template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix &multiplicand) const
 {
@@ -252,6 +343,12 @@ Matrix<T> Matrix<T>::operator*(const Matrix &multiplicand) const
     return result;
 }
 
+/**
+ * Multiplication operator *= overloading
+ * @tparam T
+ * @param addend
+ * @return pointer to "this" matrix
+ */
 template<typename T>
 void Matrix<T>::operator*=(const Matrix &multiplicand)
 {
