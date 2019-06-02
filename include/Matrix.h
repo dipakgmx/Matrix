@@ -40,7 +40,7 @@ public:
     const T &operator()(const size_t &i, const size_t &j) const;
 
     // Constructor
-    explicit Matrix(size_t row_size = 0, size_t column_size = 0, T value = 0);
+    explicit Matrix(const size_t &row_size = 0, const size_t &column_size = 0, const T value = 0);
 
     // Destructor
     virtual ~Matrix();
@@ -129,7 +129,7 @@ const T &Matrix<T>::operator()(const size_t &i, const size_t &j) const
  * @param value initial value of all elements in the matrix
  */
 template<typename T>
-Matrix<T>::Matrix(size_t row_size, size_t column_size, T value)
+Matrix<T>::Matrix(const size_t &row_size, const size_t &column_size, T value)
     :rows(row_size),
      columns(column_size),
      matrix(new T[row_size * column_size])
@@ -209,6 +209,7 @@ template<typename T>
 Matrix<T> &Matrix<T>::operator=(Matrix that)
 {
     swap(that);
+    return *this;
 }
 
 /**
